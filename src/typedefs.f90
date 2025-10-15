@@ -1,5 +1,7 @@
 MODULE TypeDefs
 
+  USE MPI
+
   IMPLICIT NONE
 
   INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
@@ -11,7 +13,6 @@ MODULE TypeDefs
   LOGICAL :: DebugMode,PrintTimes
 
   INCLUDE 'param.dat'
-  INCLUDE 'mpif.h'
   INCLUDE 'na90.dat'
 
   !Structure for holding initial position of this partition's points, as well

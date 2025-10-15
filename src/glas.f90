@@ -9,6 +9,7 @@ MODULE Lattice
 USE INOUT
 USE Utils
 USE TypeDefs
+USE MPI
 
 IMPLICIT NONE
 
