@@ -13,9 +13,9 @@ cd ${ROOT_DIR}/build
 
 mkdir -p ${ROOT_DIR}/install
 
-CMAKE_CMD="cmake ../ -DCMAKE_INSTALL_PREFIX=${ROOT_DIR}/install -DCMAKE_TOOLCHAIN_FILE=./scripts/toolchains/HiDEM-ubuntu.cmake -DCMAKE_BUILD_TYPE=Release"
+#CMAKE_CMD="cmake ../ -DCMAKE_INSTALL_PREFIX=${ROOT_DIR}/install -DCMAKE_TOOLCHAIN_FILE=./scripts/toolchains/HiDEM-ubuntu.cmake -DCMAKE_BUILD_TYPE=Release"
 #If you want a debug build instead:
-#CMAKE_CMD="cmake ../ -DCMAKE_INSTALL_PREFIX=${ROOT_DIR}/install -DCMAKE_TOOLCHAIN_FILE=./scripts/toolchains/HiDEM-ubuntu.cmake -DCMAKE_BUILD_TYPE=Debug"
+CMAKE_CMD="cmake ../ -DCMAKE_INSTALL_PREFIX=${ROOT_DIR}/install -DCMAKE_TOOLCHAIN_FILE=./scripts/toolchains/HiDEM-ubuntu.cmake -DCMAKE_BUILD_TYPE=Debug"
 
 if ! ${CMAKE_CMD}; then
     echo "Abort..."
