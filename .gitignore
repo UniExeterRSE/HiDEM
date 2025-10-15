@@ -1,8 +1,7 @@
 *~
 *#
 build/*
-./install/*
+install/*
 test/Results/*
 test/work/*
 test/*.log
-
