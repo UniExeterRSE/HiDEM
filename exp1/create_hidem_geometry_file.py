@@ -81,11 +81,11 @@ def main():
             ):
                 f.write(f"{xi: .18e} {yi: .18e} {si: .18e} {bi: .18e} {be: .18e} {fr: .18e}\n")
 
-    print(f"✅ Geometry file written to {args.output}")
-    print(f"   Domain: {args.xsize:.0f} m × {args.ysize:.0f} m")
-    print(f"   Grid spacing: {args.dx:.1f} m  →  {nx} × {ny} points  ({num_points:,} total)")
+    print(f"Geometry file written to {args.output}")
+    print(f"  Domain: {args.xsize:.0f} m × {args.ysize:.0f} m")
+    print(f"  Grid spacing: {args.dx:.1f} m  →  {nx} × {ny} points  ({num_points:,} total)")
     if args.include_mask:
-        print("   Included geom_mask column (ice=1, ocean=2)")
+        print("  Included geom_mask column (ice=1, ocean=2)")
 
 if __name__ == "__main__":
     main()
