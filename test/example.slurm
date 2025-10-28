@@ -11,7 +11,7 @@
 #SBATCH --nodes=7
 #SBATCH --ntasks-per-node=20
 #SBATCH --ntasks=140                               # number of MPI ranks
-#SBATCH --time=06:00:00
+#SBATCH --time=24:00:00
 
 module load CMake/3.26.3-GCCcore-12.3.0 OpenMPI/4.1.5-GCC-12.3.0
 
