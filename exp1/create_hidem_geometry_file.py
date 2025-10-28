@@ -8,14 +8,14 @@ def main():
     )
     parser.add_argument("-o", "--output", default="geometry.dat",
                         help="Output filename (default: geometry.dat)")
-    parser.add_argument("--xsize", type=float, default=3000.0,
-                        help="Domain size in x-direction (m, default: 3000)")
-    parser.add_argument("--ysize", type=float, default=2000.0,
-                        help="Domain size in y-direction (km, default: 2000)")
-    parser.add_argument("--nx", type=int, default=121,
-                        help="Number of grid points in x-direction (default: 121)")
-    parser.add_argument("--ny", type=int, default=81,
-                        help="Number of grid points in y-direction (default: 81)")
+    parser.add_argument("--xsize", type=float, default=2000.0,
+                        help="Domain size in x-direction (m, default: 2000)")
+    parser.add_argument("--ysize", type=float, default=4000.0,
+                        help="Domain size in y-direction (km, default: 4000)")
+    parser.add_argument("--nx", type=int, default=81,
+                        help="Number of grid points in x-direction (default: 81)")
+    parser.add_argument("--ny", type=int, default=161,
+                        help="Number of grid points in y-direction (default: 161)")
     parser.add_argument("--ice_length", type=float, default=1000.0,
                         help="Length of ice sheet along y (m, default: 1000)")
     parser.add_argument("--height_inland", type=float, default=300.0,
