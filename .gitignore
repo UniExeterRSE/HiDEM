@@ -5,3 +5,9 @@ install/*
 test/Results/*
 test/work/*
 test/*.log
+install/HiDEM
+test/Results/HiDEM_test_dtop00
+test/Results/HiDEM_test_dtop01
+test/Results/HiDEM_test_dtopr
+test/Results/HiDEM_test_kins2
+test/.venv
