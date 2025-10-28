@@ -11,11 +11,9 @@ def main():
     parser.add_argument("--xsize", type=float, default=2000.0,
                         help="Domain size in x-direction (m, default: 2000)")
     parser.add_argument("--ysize", type=float, default=4000.0,
-                        help="Domain size in y-direction (km, default: 4000)")
-    parser.add_argument("--nx", type=int, default=81,
-                        help="Number of grid points in x-direction (default: 81)")
-    parser.add_argument("--ny", type=int, default=161,
-                        help="Number of grid points in y-direction (default: 161)")
+                        help="Domain size in y-direction (m, default: 4000)")
+    parser.add_argument("--dx", type=float, default=25.0,
+                        help="Grid spacing in metres (default: 25)")
     parser.add_argument("--ice_length", type=float, default=1000.0,
                         help="Length of ice sheet along y (m, default: 1000)")
     parser.add_argument("--height_inland", type=float, default=300.0,
@@ -27,9 +25,13 @@ def main():
 
     args = parser.parse_args()
 
-    # Grid coordinates
-    x = np.linspace(0, args.xsize, args.nx)
-    y = np.linspace(0, args.ysize, args.ny)
+    # Derive grid size from spacing
+    nx = int(round(args.xsize / args.dx)) + 1
+    ny = int(round(args.ysize / args.dx)) + 1
+
+    # Generate coordinate grid
+    x = np.linspace(0, args.xsize, nx)
+    y = np.linspace(0, args.ysize, ny)
     xm, ym = np.meshgrid(x, y)
 
     # Initialize arrays
@@ -42,7 +44,7 @@ def main():
     # Ice region: y < ice_length
     ice_mask = ym < args.ice_length
 
-    # Linear gradient in ice height
+    # Linear gradient in ice surface height
     surface[ice_mask] = np.interp(
         ym[ice_mask],
         [0, args.ice_length],
@@ -62,7 +64,7 @@ def main():
     geom_mask[~ice_mask] = 2
 
     # Flatten for output
-    num_points = args.nx * args.ny
+    num_points = nx * ny
 
     with open(args.output, "w") as f:
         f.write(f"{num_points}\n")
@@ -79,7 +81,9 @@ def main():
             ):
                 f.write(f"{xi: .18e} {yi: .18e} {si: .18e} {bi: .18e} {be: .18e} {fr: .18e}\n")
 
-    print(f" Geometry file written to {args.output} ({num_points} points)")
+    print(f"✅ Geometry file written to {args.output}")
+    print(f"   Domain: {args.xsize:.0f} m × {args.ysize:.0f} m")
+    print(f"   Grid spacing: {args.dx:.1f} m  →  {nx} × {ny} points  ({num_points:,} total)")
     if args.include_mask:
         print("   Included geom_mask column (ice=1, ocean=2)")
 
