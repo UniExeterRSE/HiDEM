@@ -3,8 +3,8 @@
 .idea/*
 build/*
 install/*
-test/.venv
-test/Results/*
-test/Paraview/*
-test/work/*
-test/*.log
+*/.venv
+*/Results/*
+*/Paraview/*
+*/work/*
+*/*.log
