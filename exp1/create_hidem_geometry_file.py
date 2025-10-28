@@ -71,13 +71,13 @@ def main():
                 xm.ravel(), ym.ravel(), surface.ravel(),
                 base.ravel(), bed.ravel(), friction.ravel(), geom_mask.ravel()
             ):
-                f.write(f"{xi: .18e}\t{yi: .18e}\t{si: .18e}\t{bi: .18e}\t{be: .18e}\t{fr: .18e}\t{int(gm)}\n")
+                f.write(f"{xi: .18e} {yi: .18e} {si: .18e} {bi: .18e} {be: .18e} {fr: .18e} {int(gm)}\n")
         else:
             for xi, yi, si, bi, be, fr in zip(
                 xm.ravel(), ym.ravel(), surface.ravel(),
                 base.ravel(), bed.ravel(), friction.ravel()
             ):
-                f.write(f"{xi: .18e}\t{yi: .18e}\t{si: .18e}\t{bi: .18e}\t{be: .18e}\t{fr: .18e}\n")
+                f.write(f"{xi: .18e} {yi: .18e} {si: .18e} {bi: .18e} {be: .18e} {fr: .18e}\n")
 
     print(f" Geometry file written to {args.output} ({num_points} points)")
     if args.include_mask:
