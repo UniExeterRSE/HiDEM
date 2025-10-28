@@ -1,3 +1,7 @@
+#!/bin/bash
+
+module load CMake/3.26.3-GCCcore-12.3.0 OpenMPI/4.1.5-GCC-12.3.0
+
 # Get the source file path (works for sourced or executed scripts)
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # Resolve symlinks
@@ -8,10 +12,10 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 ROOT_DIR=${SCRIPT_DIR}/../..
 
-mkdir -p ${ROOT_DIR}/build
-cd ${ROOT_DIR}/build
+mkdir -p "${ROOT_DIR}/build"
+cd "${ROOT_DIR}/build" || exit
 
-mkdir -p ${ROOT_DIR}/install
+mkdir -p "${ROOT_DIR}/install"
 
 #CMAKE_CMD="cmake ../ -DCMAKE_INSTALL_PREFIX=${ROOT_DIR}/install -DCMAKE_TOOLCHAIN_FILE=./scripts/toolchains/HiDEM-ubuntu.cmake -DCMAKE_BUILD_TYPE=Release"
 #If you want a debug build instead:
