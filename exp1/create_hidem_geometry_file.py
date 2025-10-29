@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 import argparse
 import numpy as np
+from pathlib import Path
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate a HiDEM geometry file (x, y, surface, base, bed, friction, geom_mask)"
+        description="Generate a HiDEM geometry file (columns are: x, y, surface, base, bed, friction[, geom_mask])"
     )
     parser.add_argument("-o", "--output", default="geometry.dat",
                         help="Output filename (default: geometry.dat)")
-    parser.add_argument("--xsize", type=float, default=2000.0,
-                        help="Domain size in x-direction (m, default: 2000)")
-    parser.add_argument("--ysize", type=float, default=4000.0,
-                        help="Domain size in y-direction (m, default: 4000)")
+    parser.add_argument("--xstart", type=float, default=-100.0,
+                        help="Start of domain in x-direction (m, default: -100)")
+    parser.add_argument("--xend", type=float, default=1600.0,
+                        help="End of domain in x-direction (m, default: 1600)")
+    parser.add_argument("--ystart", type=float, default=0.0,
+                        help="Start of domain in y-direction (m, default: 0)")
+    parser.add_argument("--yend", type=float, default=4000.0,
+                        help="End of domain in y-direction (m, default: 4000)")
     parser.add_argument("--dx", type=float, default=25.0,
                         help="Grid spacing in metres (default: 25)")
     parser.add_argument("--ice_length", type=float, default=1000.0,
@@ -25,13 +30,15 @@ def main():
 
     args = parser.parse_args()
 
+    output_file = Path(args.output)
+
     # Derive grid size from spacing
-    nx = int(round(args.xsize / args.dx)) + 1
-    ny = int(round(args.ysize / args.dx)) + 1
+    nx = int(round((args.xend - args.xstart) / args.dx)) + 1
+    ny = int(round((args.yend - args.ystart) / args.dx)) + 1
 
     # Generate coordinate grid
-    x = np.linspace(0, args.xsize, nx)
-    y = np.linspace(0, args.ysize, ny)
+    x = np.linspace(args.xstart, args.xend, nx)
+    y = np.linspace(args.ystart, args.yend, ny)
     xm, ym = np.meshgrid(x, y)
 
     # Initialize arrays
@@ -51,12 +58,15 @@ def main():
         [args.height_inland, args.height_ocean]
     )
 
+    surface[xm < args.xstart + args.dx] = 0.0
+    surface[xm > args.xend - args.dx] = 0.0
+
     # Base and bed = 0 throughout
     base[:] = 0.0
     bed[:] = 0.0
 
-    # Friction = 1 in ice, 0 elsewhere
-    friction[ice_mask] = 1.0
+    # Friction = 1000 in ice, 0 elsewhere
+    friction[ice_mask] = 1000.0
     friction[~ice_mask] = 0.0
 
     # geom_mask: 1 for ice, 2 for ocean
@@ -66,7 +76,7 @@ def main():
     # Flatten for output
     num_points = nx * ny
 
-    with open(args.output, "w") as f:
+    with open(output_file, "w") as f:
         f.write(f"{num_points}\n")
         if args.include_mask:
             for xi, yi, si, bi, be, fr, gm in zip(
@@ -81,8 +91,8 @@ def main():
             ):
                 f.write(f"{xi: .18e} {yi: .18e} {si: .18e} {bi: .18e} {be: .18e} {fr: .18e}\n")
 
-    print(f"Geometry file written to {args.output}")
-    print(f"  Domain: {args.xsize:.0f} m × {args.ysize:.0f} m")
+    print(f"Geometry file written to {output_file.resolve()}")
+    print(f"  Domain: {args.xend - args.xstart:.0f} m × {args.yend - args.ystart:.0f} m ({args.xstart} → {args.xend}, {args.ystart} → {args.yend})")
     print(f"  Grid spacing: {args.dx:.1f} m  →  {nx} × {ny} points  ({num_points:,} total)")
     if args.include_mask:
         print("  Included geom_mask column (ice=1, ocean=2)")

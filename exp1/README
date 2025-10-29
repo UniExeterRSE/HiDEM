@@ -1,1 +1,2 @@
 python create_hidem_geometry_file.py --include_mask -o geometry_exp1.dat
+python create_hidem_geometry_file.py --include_mask -o geometry_exp1.dat --xsize 1600

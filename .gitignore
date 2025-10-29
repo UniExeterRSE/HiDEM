@@ -1,6 +1,7 @@
 *~
 *#
 .idea/*
+.vscode/*
 build/*
 install/*
 */.venv

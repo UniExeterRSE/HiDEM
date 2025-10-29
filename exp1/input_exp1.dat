@@ -1,4 +1,5 @@
 Run Name = "HiDEM_exp1"
+Debug Mode = False
 Geometry File = "geometry_exp1.dat"
 Work Directory = "./work"
 Results Directory = "./Results"
@@ -13,7 +14,7 @@ Output Interval = 20000
 No Timesteps = 5000000
 Bed Stiffness Constant = 1.0E8
 Bed Z Only = False
-Geometry File Has Mask = True
+Geometry File Has Mask = False
 
 !Allow the domain some time to settle:
 Fracture After Time = 40.0
