@@ -45,12 +45,3 @@ def save_animation_file(output_path, resolution=(1920, 1080), frame_rate=10):
                   renderView,
                   ImageResolution=list(resolution),
                   FrameRate=frame_rate)
-
-glyph_path = get_source_path()
-output_path = glyph_path.parent / "animation.avi"
-
-animationScene, timeKeeper, timesteps = setup_animation_scene()
-
-save_animation_file(output_path)
-
-print(f"AVI saved to: {output_path} ({len(timesteps)} frames)")
