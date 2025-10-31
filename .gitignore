@@ -5,7 +5,8 @@
 build/*
 install/*
 */.venv
-*/Results/*
-*/Paraview/*
-*/work/*
+test/Results/*
+test/work/*
+exp*/Results/*
+exp*/work/*
 */*.log

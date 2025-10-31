@@ -1,0 +1,2 @@
+# geometry file created with:
+python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp3.dat --height_inland 900 --height_ocean 300
