@@ -30,6 +30,21 @@ def main():
 
     args = parser.parse_args()
 
+    # Print parameter values
+    print("=" * 60)
+    print("Parameter values:")
+    print("=" * 60)
+    print(f"  Output file:        {args.output}")
+    print(f"  X-domain:           {args.xstart} to {args.xend} m")
+    print(f"  Y-domain:           {args.ystart} to {args.yend} m")
+    print(f"  Grid spacing (dx):  {args.dx} m")
+    print(f"  Ice length:         {args.ice_length} m")
+    print(f"  Height inland:      {args.height_inland} m")
+    print(f"  Height ocean:       {args.height_ocean} m")
+    print(f"  Include mask:       {args.include_mask}")
+    print("=" * 60)
+    print()
+
     output_file = Path(args.output)
 
     # Derive grid size from spacing
