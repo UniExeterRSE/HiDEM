@@ -1,0 +1,9 @@
+# geometry file created with:
+python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp4.dat --xstart 0 --ystart 0 --xend 4000 --yend 10000 --ice_length 8000 --height_ocean 700 --height_inland 1000 --dx 50
+
+
+
+# Purpose: define a glacier similar to the Helheim glacier/Greenland with a water depth of 600m and 100m high above-water cliffs
+#          the domain is 4km wide (approx width at the terminus) and 10km long with 8km of it taken up by the ice block.
+#          the ice thus that 2km to collapse into in the y-direction. The water depth is 600m at the mouth
+# Result: 

@@ -1,0 +1,5 @@
+# geometry file created with:
+python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp1.dat
+
+# Purpose: like exp1, but test a different porosity = 0.2 (instead of 0.1), so only the namelist is different to exp1
+# Result:  

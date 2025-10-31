@@ -8,5 +8,6 @@ install/*
 test/Results/*
 test/work/*
 exp*/Results/*
+exp*/results/*
 exp*/work/*
 */*.log
