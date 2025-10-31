@@ -1,2 +1,6 @@
 # geometry file created with:
 python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp2.dat --dx 20
+
+
+# Purpose: test higher resolution grid Grid = 20.0 (instead of 25m)
+# Result: 

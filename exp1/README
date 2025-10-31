@@ -1,2 +1,7 @@
 # geometry file created with:
 python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp1.dat
+
+# Purpose: test HiDEM with a user-created geometry (instead of the geometry.dat file that came with the repo)
+#          the created geometry uses the same dimensions and the same grid as the test case, but different initial surface of the ice block
+# Result:  The experiment was successful in that the model ran to completion, but the behaviour is the same as for the test case - 
+#          one single crevasse opens up and the marbles tumble out of that crevasse, no further cracking happens

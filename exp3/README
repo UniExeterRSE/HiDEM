@@ -1,2 +1,6 @@
 # geometry file created with:
 python ../scripts/setup/create_hidem_geometry_file.py -o geometry_exp3.dat --height_inland 900 --height_ocean 300
+
+
+# Purpose: test steeply sloping block of ice iwth an inland height of 900m and an ocean-facing height of 300m
+# Result: 
