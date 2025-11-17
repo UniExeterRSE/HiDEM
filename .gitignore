@@ -12,3 +12,4 @@ exp*/[Rr]esults/*
 exp*/work/*
 */*.log
 run_isambard3.slurm
+run_isca.slurm
