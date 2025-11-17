@@ -104,4 +104,4 @@ EOF
 # Submit the job
 sbatch "$SLURM_FILE"
 
-/usr/bin/squeue -o "%.8i %.9P %.32j %.12u %.12T %.7M %.4C %.12l %.7m %.3D %R" --sort=+i --me
+/opt/slurm/23.02.6/el9/bin/squeue -o "%.8i %.9P %.32j %.12u %.12T %.7M %.4C %.12l %.7m %.3D %R" --sort=+i --me
