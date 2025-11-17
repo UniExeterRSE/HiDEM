@@ -20,8 +20,9 @@ echo "========================================================================"
 
 # Load necessary modules for Isambard3
 module purge
-module load PrgEnv-cray 2>/dev/null
-module load cray-mpich 2>/dev/null
+module load PrgEnv-cray          2>/dev/null
+module load craype-network-ofi   2>/dev/null
+module load cray-mpich           2>/dev/null
 
 echo "------------------------------------------------------------------------"
 echo "Loaded modules:"
