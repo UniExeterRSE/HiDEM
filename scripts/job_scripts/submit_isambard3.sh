@@ -1,8 +1,40 @@
 #!/bin/bash
 # Script to submit a HiDEM job to Isambard3, generating the slurm file
 
+
 INP_FILE="inp.dat"
 SLURM_FILE="run_isambard3.slurm"
+NODES=1
+NTASKS_PER_NODE=144
+
+
+# Print usage
+usage() {
+	echo "Usage: $0 [-n|--nodes N] [-h|--help]"
+	echo "  -n, --nodes N     Number of nodes (default: $NODES)"
+	echo "  -h, --help        Show this help message and exit"
+}
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+	key="$1"
+	case $key in
+		-n|--nodes)
+			NODES="$2"
+			shift; shift
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			shift
+			;;
+	esac
+done
+
+# Calculate total number of MPI ranks
+NTASKS=$((NODES * NTASKS_PER_NODE))
 
 # Parse Run Name, Work Directory, and Results Directory from inp.dat
 RUN_NAME=$(grep -E '^Run Name' "$INP_FILE" | sed -E 's/.*=\s*"([^"]+)".*/\1/')
@@ -21,8 +53,9 @@ cat > "$SLURM_FILE" <<EOF
 #SBATCH --partition=grace
 #SBATCH --account=brics.e5i
 #SBATCH --qos=normal
-#SBATCH --nodes=4
-#SBATCH --ntasks=576               # total MPI ranks
+#SBATCH --nodes=${NODES}
+#SBATCH --ntasks=${NTASKS}               # total MPI ranks
+#SBATCH --ntasks-per-node=${NTASKS_PER_NODE}
 #SBATCH --time=6:00:00
 
 echo "========================================================================"

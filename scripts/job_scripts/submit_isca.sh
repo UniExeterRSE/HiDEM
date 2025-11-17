@@ -3,6 +3,37 @@
 
 INP_FILE="inp.dat"
 SLURM_FILE="run_isca.slurm"
+NODES=10
+NTASKS_PER_NODE=20
+
+
+# Print usage
+usage() {
+	echo "Usage: $0 [-n|--nodes N] [-h|--help]"
+	echo "  -n, --nodes N     Number of nodes (default: $NODES)"
+	echo "  -h, --help        Show this help message and exit"
+}
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+	key="$1"
+	case $key in
+		-n|--nodes)
+			NODES="$2"
+			shift; shift
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			shift
+			;;
+	esac
+done
+
+# Calculate total number of MPI ranks
+NTASKS=$((NODES * NTASKS_PER_NODE))
 
 # Parse Run Name, Work Directory, and Results Directory from inp.dat
 RUN_NAME=$(grep -E '^Run Name' "$INP_FILE" | sed -E 's/.*=\s*"([^"]+)".*/\1/')
@@ -20,9 +51,9 @@ cat > "$SLURM_FILE" <<EOF
 #SBATCH --error=%x-%j.err.log
 #SBATCH --partition=sq                             # serial queue
 #SBATCH --account=Research_Project-T125973         # research project SWAIS-2C
-#SBATCH --nodes=10
-#SBATCH --ntasks-per-node=20
-#SBATCH --ntasks=200                               # total MPI ranks
+#SBATCH --nodes=${NODES}
+#SBATCH --ntasks=${NTASKS}               # total MPI ranks
+#SBATCH --ntasks-per-node=${NTASKS_PER_NODE}
 #SBATCH --time=24:00:00
 
 echo "========================================================================"
@@ -39,13 +70,13 @@ echo "Loaded modules:"
 module list 2>&1 | cat
 echo "------------------------------------------------------------------------"
 
-# Set OMP_NUM_THREADS for single-threaded tasks
+# Set OMP threads for single-threaded tasks
 export OMP_NUM_THREADS=1
 
-# Create directories
+# Create output directories (to match input dat file)
 mkdir -p ${RESULTS_DIR} ${WORK_DIR}
 
-# MPI run command
+# MPI run command on ISCA
 RUN_CMD="mpirun --mca pml ucx --mca btl ^openib --mca fs ^gpfs ../install/HiDEM"
 
 echo "========================================================================"
