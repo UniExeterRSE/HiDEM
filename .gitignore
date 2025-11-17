@@ -5,9 +5,9 @@
 build/*
 install/*
 */.venv
-test/Results/*
+test/[Rr]esults/*
 test/work/*
-exp*/Results/*
-exp*/results/*
+exp*/[Rr]esults/*
+exp*/[Rr]esults/*
 exp*/work/*
 */*.log
