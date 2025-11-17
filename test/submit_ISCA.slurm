@@ -19,7 +19,7 @@ module load CMake/3.26.3-GCCcore-12.3.0 OpenMPI/4.1.5-GCC-12.3.0
 export OMP_NUM_THREADS=1
 
 # Create directories
-mkdir -p ./Results ./work
+mkdir -p ./results ./work
 
 RUN_CMD="mpirun --mca pml ucx --mca btl ^openib --mca fs ^gpfs ../install/HiDEM"
 #RUN_CMD="mpirun --mca fs ^gpfs ../install/HiDEM"
