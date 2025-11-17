@@ -1,7 +1,7 @@
 Run Name = "HiDEM_test"
 Geometry File = "test_geometry.dat"
 Work Directory = "./work"
-Results Directory = "./Results"
+Results Directory = "./results"
 Density = 930.0
 Water Density = 1030.0
 Gravity = 9.81
@@ -20,3 +20,6 @@ Fracture After Time = 40.0
 !Changing these two parameters will alter model behaviour:
 Max Load = 0.0002
 Friction Scale = 1.0
+
+Debug Mode = False
+double precision output = True
