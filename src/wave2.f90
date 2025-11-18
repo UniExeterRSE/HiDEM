@@ -1301,7 +1301,7 @@ END IF
 
         DEALLOCATE(IsLost, IsOutlier)
 
-  	STOP
+  	STOP 'Successful completion of time loop'
 
 CONTAINS
 
