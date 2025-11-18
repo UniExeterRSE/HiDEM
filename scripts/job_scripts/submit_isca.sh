@@ -1,9 +1,11 @@
 #!/bin/bash
 # Script to submit a HiDEM job to ISCA, generating the slurm file from inp.dat
 
+CMD_LINE=$(printf %q "$BASH_SOURCE")$((($#)) && printf ' %q' "$@")
+
 INP_FILE="inp.dat"
 SLURM_FILE="run_isca.slurm"
-NODES=10
+NODES=5
 NTASKS_PER_NODE=20
 
 
@@ -44,8 +46,10 @@ RESULTS_DIR=$(grep -E '^Results Directory' "$INP_FILE" | sed -E 's/.*=\s*"?([^\"
 cat > "$SLURM_FILE" <<EOF
 #!/bin/bash
 #
-# Slurm run script for HiDEM job on ISCA (auto-generated)
-#
+# Slurm run script for HiDEM job on ISCA
+#  auto-generated using this command:
+#  $CMD_LINE
+
 #SBATCH --job-name=${RUN_NAME}
 #SBATCH --output=%x-%j.out.log
 #SBATCH --error=%x-%j.err.log
@@ -89,7 +93,7 @@ time \${RUN_CMD}
 RETCODE=\$?
 END=\$(date +%s.%N)
 
-DURATION=\$(echo "$\END - \$START" | bc)
+DURATION=\$(echo "\$END - \$START" | bc)
 
 echo "========================================================================"
 echo "End time: \$(date)"
@@ -102,6 +106,6 @@ exit \${RETCODE}
 EOF
 
 # Submit the job
-sbatch "$SLURM_FILE"
+sbatch "${SLURM_FILE}"
 
 /opt/slurm/23.02.6/el9/bin/squeue -o "%.8i %.9P %.32j %.12u %.12T %.7M %.4C %.12l %.7m %.3D %R" --sort=+i --me
