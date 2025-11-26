@@ -65,6 +65,11 @@ echo "Job ${RUN_NAME} started on \$(hostname) at \$(date)"
 echo "Job ID: \$SLURM_JOB_ID"
 echo "========================================================================"
 
+echo "SLURM_NTASKS=\${SLURM_NTASKS}"                    # Same as -n, –ntasks. The number of tasks.
+echo "SLURM_NNODES=\${SLURM_NNODES}"                    # Total number of nodes in the job’s resource allocation.
+echo "SLURM_CPUS_PER_TASK=\${SLURM_CPUS_PER_TASK}"      # Number of CPUs per task.
+echo "SLURM_NTASKS_PER_NODE=\${SLURM_NTASKS_PER_NODE}"  # Number of tasks requested per node.
+
 # Load necessary modules for ISCA
 module load CMake/3.26.3-GCCcore-12.3.0 OpenMPI/4.1.5-GCC-12.3.0
 
