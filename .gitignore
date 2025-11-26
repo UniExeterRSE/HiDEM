@@ -7,6 +7,7 @@ install/*
 */.venv
 test/[Rr]esults/*
 test/work/*
+test_DoublePrec/*
 exp*/[Rr]esults/*
 exp*/[Rr]esults/*
 exp*/work/*
