@@ -58,6 +58,8 @@ cat > "$SLURM_FILE" <<EOF
 #SBATCH --nodes=${NODES}
 #SBATCH --ntasks=${NTASKS}               # total MPI ranks
 #SBATCH --ntasks-per-node=${NTASKS_PER_NODE}
+#SBATCH --cpus-per-task=1
+#SBATCH --distribution=block:block:block
 #SBATCH --time=6:00:00
 
 echo "========================================================================"
@@ -81,8 +83,20 @@ echo "Loaded modules:"
 module list 2>&1 | cat
 echo "------------------------------------------------------------------------"
 
-# Set OMP threads for single-threaded tasks
+# MPI and OpenMP optimization settings
+# These settings improve on-node communication and reduce MPI overhead
 export OMP_NUM_THREADS=1
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+
+# NUMA-aware MPI optimizations for Grace architecture
+export MPICH_OFI_NIC_POLICY=NUMA           # Use NUMA-local NICs
+export MPICH_RANK_REORDER_METHOD=1         # SMP reordering for better on-node communication
+export MPICH_CPUMASK_DISPLAY=0             # Set to 1 to debug CPU binding
+
+# Additional MPI performance tuning
+export MPICH_ENV_DISPLAY=0                 # Set to 1 to see all MPI env vars
+export MPICH_OPTIMIZED_MEMCPY=1            # Use optimized memcpy for large messages
 
 # Create output directories (to match input dat file)
 mkdir -p ${RESULTS_DIR} ${WORK_DIR}
