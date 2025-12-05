@@ -7,12 +7,12 @@ build_pat/*
 install/*
 install_pat/*
 */.venv
-test/[Rr]esults/*
+test/[Rr]esults*/*
 test/work/*
 test_DoublePrec/*
-exp*/[Rr]esults/*
-exp*/[Rr]esults/*
-exp*/work/*
+exp*/[Rr]esults*/*
+exp*/[Rr]esults*/*
+exp*/work*/*
 exp*/HiDEM.inst+*/*
 */*.log
 run_isambard3.slurm
