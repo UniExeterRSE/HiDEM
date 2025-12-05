@@ -80,12 +80,19 @@ echo "Generating profiling report..."
 echo "========================================================================"
 
 for dir in ${MODEL_EXE##*/}+*/; do
-    # Generate a single .ap2 file from all .xf files
-    echo "pat_report -f ap2 -o ${dir}/merged.ap2 ${dir}/xf-files/*.xf"
-    pat_report -f ap2 -o ${dir}/merged.ap2 ${dir}/xf-files/*.xf
+    FILES=(${dir}/xf-files/*.xf)
+    if [[ ${#FILES[@]} == 1 ]]; then
+        # Generate report from single file
+        echo "pat_report -f ap2 -o ${MODEL_EXE##*/}_timing_report.txt ${FILES[0]}"
+        pat_report -f ap2 -o ${MODEL_EXE##*/}_timing_report.txt ${FILES[0]}
+    else
+        # Generate a single .ap2 file from all .xf files
+        echo "pat_report -f ap2 -o ${dir}/merged.ap2 ${dir}/xf-files/*.xf"
+        pat_report -f ap2 -o ${dir}/merged.ap2 ${dir}/xf-files/*.xf
 
-    echo "pat_report -o ${MODEL_EXE##*/}_timing_report.txt ${dir}/merged.ap2"
-    pat_report -o ${MODEL_EXE##*/}_timing_report.txt ${dir}/merged.ap2
+        echo "pat_report -o ${MODEL_EXE##*/}_timing_report.txt ${dir}/merged.ap2"
+        pat_report -o ${MODEL_EXE##*/}_timing_report.txt ${dir}/merged.ap2
+    fi
 done
 
 # It should create these files

@@ -15,7 +15,7 @@ exp*/[Rr]esults*/*
 exp*/work*/*
 exp*/HiDEM.inst+*/*
 */*.log
-run_isambard3.slurm
+run_isambard3*.slurm
 run_isca.slurm
 exp*/build-options.apa
 exp*/HiDEM.inst_timing_report.txt

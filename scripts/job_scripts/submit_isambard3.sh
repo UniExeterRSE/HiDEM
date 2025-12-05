@@ -3,15 +3,20 @@
 
 CMD_LINE=$(printf %q "$BASH_SOURCE")$((($#)) && printf ' %q' "$@")
 
-INP_FILE="inp.dat"
-SLURM_FILE="run_isambard3.slurm"
-NODES=1
+INP_FILE="$(cat HIDEM_STARTINFO || echo "")"
+if [ -z "$INP_FILE" ] || [ ! -f "$INP_FILE" ]; then
+	echo "Error: Input file not specified or does not exist. Please create a HIDEM_STARTINFO file with the path to the input dat file."
+	exit 1
+fi
+NUM_NODES=1
 NTASKS_PER_NODE=144
+# NTASKS_PER_NODE=72
+# NTASKS_PER_NODE=36
 
 # Print usage
 usage() {
 	echo "Usage: $0 [-n|--nodes N] [-h|--help]"
-	echo "  -n, --nodes N     Number of nodes (default: $NODES)"
+	echo "  -n, --nodes N     Number of nodes (default: ${NUM_NODES})"
 	echo "  -h, --help        Show this help message and exit"
 }
 
@@ -20,7 +25,7 @@ while [[ $# -gt 0 ]]; do
 	key="$1"
 	case $key in
 		-n|--nodes)
-			NODES="$2"
+			NUM_NODES="$2"
 			shift; shift
 			;;
 		-h|--help)
@@ -34,12 +39,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Calculate total number of MPI ranks
-NTASKS=$((NODES * NTASKS_PER_NODE))
+NTASKS=$((NUM_NODES * NTASKS_PER_NODE))
 
 # Parse Run Name, Work Directory, and Results Directory from inp.dat
-RUN_NAME=$(grep -E '^Run Name' "$INP_FILE" | sed -E 's/.*=\s*"([^"]+)".*/\1/')
-WORK_DIR=$(grep -E '^Work Directory' "$INP_FILE" | sed -E 's/.*=\s*"?([^\"]+)"?.*/\1/')
-RESULTS_DIR=$(grep -E '^Results Directory' "$INP_FILE" | sed -E 's/.*=\s*"?([^\"]+)"?.*/\1/')
+RUN_NAME=$(grep -E '^Run Name' "${INP_FILE}" | sed -E 's/.*=\s*"([^"]+)".*/\1/')
+if [ -z "$RUN_NAME" ]; then
+	echo "Error: Input file ${INP_FILE} doesn't specify 'Run Name'. Add a line Run Name = \"experiment_name\" to ${INP_FILE}."
+	exit 1
+fi
+
+SLURM_FILE="run_isambard3_n${NUM_NODES}_t${NTASKS}.slurm"
 
 # Write the slurm script
 cat > "$SLURM_FILE" <<EOF
@@ -55,7 +64,7 @@ cat > "$SLURM_FILE" <<EOF
 #SBATCH --partition=grace
 #SBATCH --account=brics.e5i
 #SBATCH --qos=normal
-#SBATCH --nodes=${NODES}
+#SBATCH --nodes=${NUM_NODES}
 #SBATCH --ntasks=${NTASKS}               # total MPI ranks
 #SBATCH --ntasks-per-node=${NTASKS_PER_NODE}
 #SBATCH --cpus-per-task=1
@@ -64,19 +73,17 @@ cat > "$SLURM_FILE" <<EOF
 
 echo "========================================================================"
 echo "Job ${RUN_NAME} started on \$(hostname) at \$(date)"
-echo "Job ID: \$SLURM_JOB_ID"
-echo "========================================================================"
-
+echo ""
+echo "SLURM_JOB_ID=\${SLURM_JOB_ID}"                    # Slurm Job ID
 echo "SLURM_NTASKS=\${SLURM_NTASKS}"                    # Same as -n, –ntasks. The number of tasks.
 echo "SLURM_NNODES=\${SLURM_NNODES}"                    # Total number of nodes in the job’s resource allocation.
 echo "SLURM_CPUS_PER_TASK=\${SLURM_CPUS_PER_TASK}"      # Number of CPUs per task.
 echo "SLURM_NTASKS_PER_NODE=\${SLURM_NTASKS_PER_NODE}"  # Number of tasks requested per node.
+echo "========================================================================"
 
 # Load necessary modules for Isambard3
 module purge
 module load PrgEnv-cray          2>/dev/null
-module load craype-network-ofi   2>/dev/null
-module load cray-mpich           2>/dev/null
 
 echo "------------------------------------------------------------------------"
 echo "Loaded modules:"
@@ -98,11 +105,23 @@ export MPICH_CPUMASK_DISPLAY=0             # Set to 1 to debug CPU binding
 export MPICH_ENV_DISPLAY=0                 # Set to 1 to see all MPI env vars
 export MPICH_OPTIMIZED_MEMCPY=1            # Use optimized memcpy for large messages
 
+# ========================================================================
+
+INP_FILE=${INP_FILE}
+WORK_DIR="./work_\${SLURM_JOB_ID}"
+RESULTS_DIR="./results_\${SLURM_JOB_ID}"
+sed -i "s|Work Directory = .*|Work Directory = \"\${WORK_DIR}\"|" "\${INP_FILE}"
+sed -i "s|Results Directory = .*|Results Directory = \"\${RESULTS_DIR}\"|" "\${INP_FILE}"
+
 # Create output directories (to match input dat file)
-mkdir -p ${RESULTS_DIR} ${WORK_DIR}
+mkdir -p \${RESULTS_DIR} \${WORK_DIR}
+
+MODEL_EXE="../install/HiDEM"
+
+# ========================================================================
 
 # MPI run command using srun (see https://docs.isambard.ac.uk/user-documentation/guides/slurm)
-RUN_CMD="srun --mpi=cray_shasta ../install/HiDEM"
+RUN_CMD="srun --mpi=cray_shasta \${MODEL_EXE}"
 
 echo "========================================================================"
 echo "Running: \${RUN_CMD}"
