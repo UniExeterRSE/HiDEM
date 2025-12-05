@@ -1,0 +1,2 @@
+# geometry file created with:
+../scripts/setup/create_hidem_geometry_file.py --dx 5 -o geometry_exp1.dat
