@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Parse HiDEM log files and report SLURM_NTASKS, SLURM_NNODES, NTOT min/max/avg and Duration.
 
-Usage: python3 scripts/collect_ntot_stats.py /path/to/logdir [--out out.csv]
+Usage: python3 scripts/collect_run_stats.py /path/to/logdir [--out out.csv]
 """
 import sys
 import os
